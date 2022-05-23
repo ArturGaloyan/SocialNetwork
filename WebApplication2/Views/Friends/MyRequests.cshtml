@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewData["Title"] = "MyRequests";
+    Layout = "~/Views/ProfileLayout.cshtml";
+}
+
+<h1>MyRequests</h1>
+
+<div id="requests">
+    <h4>You have {{users.length}} requests </h4>
+    <table class="table table-dark table-bordered">
+        <tr>
+            <th>name</th>
+            <th>surname</th>
+            <th>accept</th>
+            <th>decline</th>
+        </tr>
+        <tr v-for="item in users">
+            <td>{{item.name}}</td>
+            <td>{{item.surname}}</td>
+            <td><button class="btn btn-success" v-on:click="AddFriend(item)">accept</button></td>
+            <td><button class="btn btn-danger"v-on:click="jnjelHarcume(item)">decline</button></td>
+        </tr>
+    </table>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js"></script>
+<script>
+    new Vue({
+        el: "#requests",
+        data: {
+            users: [],
+          
+        },
+        methods: {
+            AddFriend: function (x) {
+                 axios.get("/Friends/Avelacnel_friend/"+x.id)
+                    .then(r => {
+                        let index = this.users.indexOf(x);
+                        this.users.splice(index, 1);
+                      
+                    })
+             
+            },
+            jnjelHarcume: function (x) {
+                console.log(x.id)
+                axios.get("/Friends/RemoveRequests/" + x.id)
+                    .then(r => {
+                        let index = this.users.indexOf(x);
+                        this.users.splice(index, 1);
+                    })
+            }
+
+        },
+        created: function () {
+            axios.get("/Friends/GetMyRequests")
+                .then(r => {
+                  this.users = r.data
+                })               
+        }
+    })
+</script>

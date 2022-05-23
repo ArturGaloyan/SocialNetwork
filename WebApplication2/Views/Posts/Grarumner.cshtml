@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewData["Title"] = "Grarumner";
+    Layout = "~/Views/ProfileLayout.cshtml";
+}
+
+<h1>Grarumner</h1>
+
+<form action="/Posts/upload" method="post" enctype="multipart/form-data">
+    <h1>upload picture</h1>
+    <input type="file" name="nkar" />
+
+    <h1>upload text</h1>
+    <input type="text" name="text" />
+
+    <button class="btn btn-success">save</button>
+</form>
+
+
+
+@*<br />
+<form action="/Posts/Uploat_Text" method="post" enctype="multipart/form-data">
+    <h1>upload text</h1>
+    <input type="text" name="nkari_name"/>
+    <button class="btn btn-success">save text</button>
+</form>*@

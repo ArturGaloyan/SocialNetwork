@@ -1,0 +1,160 @@
+﻿
+@{
+    ViewData["Title"] = "MyPosts";
+    Layout = "~/Views/ProfileLayout.cshtml";
+    var myPhotos = ViewBag.nkar as List<Photos>;
+}
+<style>
+    #box {
+        display: flex;
+        flex-wrap: wrap;
+        background: gray;
+    }
+
+        #box img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+        }
+
+    #ramka {
+        position: fixed;
+        width: 700px;
+        height: 500px;
+        background: #302929;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+    }
+
+    .cover {
+        position: absolute;
+        width: 100%;
+        height: 100vh;
+        background: black;
+        left: 0;
+        top:0;
+        opacity: 0.9;
+    }
+    #ramka img{
+        width:100%;
+        height:100%;
+        object-fit:cover;
+    }
+    #ramka button{
+    background: transparent;
+    border: none;
+    color: #FFF;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    position: absolute;
+    right: 0;
+    border: 5px solid black;
+    outline:none;
+    }
+   #ramka .next {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        color:crimson;
+        bottom:0;
+          
+    }
+    #ramka .previous {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        color: crimson;
+        left: 0;
+        bottom:0;
+    }
+
+
+</style>
+
+<h1 style="color:aqua">MyPosts</h1>
+
+<div class="d-flex" id="box">
+
+
+    <div v-if="showCover==true" class="cover"></div>
+   
+    <img v-for="(item,i) in photos"
+         v-bind:src="'/nkarner/'+item.photo" 
+         alt="Alternate Text"
+         v-bind:title="item.desc"
+        
+         v-on:click="showImage(item.photo,i)"
+         />
+      
+
+       
+    
+    <div v-if="showCover==true" id="ramka">
+        <img v-bind:src="currentPhoto" />
+        <button v-on:click="closeImage()">X</button>
+        <button class="next" v-on:click="NextImage()">Next</button>
+        <button class="previous" v-on:click="PreviousImage()">Previous</button>
+
+    </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js"></script>
+<script>
+    new Vue({
+        el: "#box",
+        data: {
+            showCover: false,
+            currentPhoto: "",
+            index: -1,
+            photos:[]
+            
+            
+        },
+        methods: {
+            showImage: function (item,no) {
+                this.currentPhoto = "/nkarner/"+item;               
+                this.showCover = true;
+                this.index = no;
+            },
+            closeImage: function () {
+                this.showCover = false;
+
+            },
+
+            NextImage: function () {
+                 this.index++;
+
+                 if (this.index >= this.photos.length) {
+                        this.index=0
+
+                    }
+                this.currentPhoto = "/nkarner/" + this.photos[this.index].photo
+                        
+            },
+             PreviousImage: function () {
+                 this.index--;
+                 if (this.index < 0) {
+                     this.index=this.photos.length
+                 }
+                this.currentPhoto = "/nkarner/" +this.photos[this.index].photo    
+
+            }
+
+        },
+        created: function () {
+            axios.get("/posts/getmyposts")
+                .then(r => {
+                    console.log(r.data)
+                    this.photos = r.data;
+                })
+        }
+        
+    })
+</script>
+@* karoxanal text nerbernel hety, ev ereva desc texty nkari vra*@

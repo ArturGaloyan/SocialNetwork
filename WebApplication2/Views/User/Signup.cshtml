@@ -1,0 +1,72 @@
+﻿
+@{
+    Layout = "~/Views/LoginLayout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Signup</title>
+</head>
+<body>
+    <div id="stugum">
+        <h1>Signup</h1>
+        <form action="/User/Grancvel" method="post">
+            @if (TempData["Namak"] != null)
+            {
+                <p style="color:red">@TempData["Namak"]</p>
+            }
+            <div>
+                <label>Firstname</label>
+                <input name="name" />
+            </div>
+            <div>
+                <label>Lastname</label>
+                <input name="surname" />
+            </div>
+            <div>
+                <label>Login</label>
+                <p class="text-danger">{{error}}</p>
+                <input name="login" type="email" v-on:blur="log_stug()" v-model="text" />
+            </div>
+            <div>
+                <label>Password</label>
+                <input type="password" name="password" />
+
+            </div>
+            <div>
+                <button>Save</button>
+            </div>
+        </form>
+    </div>
+   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js"></script>
+    <script>
+        new Vue({
+            el: "#stugum",
+            data: {
+                text: "",
+                error:""
+            },
+            methods: {
+
+                log_stug: function () {
+                    axios.get("/User/Stugel/" + this.text)
+                        .then(r => {
+                            if (r.data == 0) {
+                                this.error = "";
+                            } else {
+                                this.error = "LOGIN ZBAXVAC E"
+                            }
+                            
+                        })
+                }
+            }
+            
+        })
+    </script>
+</body>
+</html>

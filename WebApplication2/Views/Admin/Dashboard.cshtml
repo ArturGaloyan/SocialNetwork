@@ -1,0 +1,50 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+
+</head>
+<body>
+   <h1>Admin page</h1> 
+    <div class="container">
+    <table class="table table-bordered table-danger">
+    <tr>
+        <th>name</th>
+        <th>surname</th>
+    </tr>
+    
+        @foreach (User elm in ViewBag.tvyalner)
+        {
+            <tr>
+
+            <td>@elm.name</td>
+            <td>@elm.surname</td>
+            <td>
+                @if (elm.block == 0)
+                {
+                    <a href="/Admin/Block/@elm.id">block</a>
+
+                }
+                else
+                {
+                      <a href="/Admin/Block/@elm.id">unblock</a>
+                }
+            </td>
+              
+              </tr>
+        }
+
+
+
+    </table>
+        </div>
+</body>
+</html>

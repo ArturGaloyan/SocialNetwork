@@ -1,0 +1,119 @@
+﻿
+@{
+    Layout = "~/Views/ProfileLayout.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    </style>
+    <meta name="viewport" content="width=device-width" />
+    <title>Profile</title>
+</head>
+<body>
+
+    @{
+        var user = ViewBag.currentUser as User;
+    }
+
+    @if (user.photo == null)
+    {
+        <img class="profile-pic" src="https://365psd.com/images/istock/previews/1009/100996291-male-avatar-profile-picture-vector.jpg" />
+    }
+    else
+    {
+        <img class="profile-pic" src="~/nkarner/@user.photo" />
+    }
+    <h1>
+        @user.name
+        @user.surname
+    </h1>
+
+
+
+
+
+
+    @{
+        var del = ViewBag.tvyalner as List<Merjvacnery>;
+    }
+
+    @{
+        foreach (Merjvacnery elm in del)
+        {
+            <h1>
+                @elm.User1.name 
+                @elm.User1.surname
+                @elm.text
+            </h1>
+        }
+    }
+
+
+
+
+
+
+
+
+    <div id="SearchUsers" style="background:yellowgreen;padding:10px">
+        <p>{{users.length}} result</p>
+        <input class="form-control" v-model="text" v-on:input="SearchUsers()" />
+        <div class="row">
+            <div class="col-md-3" v-for="item in users">
+                <img v-if="!item.photo" width="150" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRPRCvXQJKmljRctLnk0f1wuHHUPOm_opTVzA&usqp=CAU" />
+                <img v-if="item.photo" width="150" v-bind:src="'/nkarner/'+item.photo" />
+                <h4>{{item.name}} {{item.surname}}</h4>
+                <button v-if="!item.isRequestSent && item.arefriends==0" v-on:click="Avelacnel(item)">Add friend</button>
+                <p class="text-success" v-if="item.isRequestSent">Request sent....</p>
+                <p class="text-danger" v-if="item.arefriends==1">Friends</p>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js"></script>
+    <script>
+
+        new Vue({
+            el: "#SearchUsers",
+            data: {
+                users: [],
+                text: ""
+            },
+
+            methods: {
+                SearchUsers: function () {
+                    console.log(this.text)
+                    axios.get("/User/SearchFriends/" + this.text)
+                        .then(r => {
+                            console.log(r.data)
+                            this.users = r.data;
+                        })
+                },
+
+                Avelacnel: function (x) {
+                    x.isRequestSent = true;
+
+                    axios.get("/Friends/Add/" + x.id)
+                        .then(r => {
+
+                        })
+
+                }
+
+            }
+
+        })
+    </script>
+
+</body>
+</html>

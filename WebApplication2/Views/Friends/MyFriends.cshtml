@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewData["Title"] = "MyFriends";
+    Layout = "~/Views/ProfileLayout.cshtml";   
+    
+}
+
+<h1>MyFriends</h1>
+<div id="friends">
+    <table class="table table-bordered table-danger">
+        <tr>
+            <th>name</th>
+            <th>surname</th>
+            <th>remove</th>
+        </tr>
+        <tr v-for="elm in ynkerner">
+            <td>{{elm.name}} </td>
+            <td>{{elm.surname}} </td>
+            <td><button class="btn btn-danger" v-on:click="jnjel(elm)">Remove friend</button></td>
+            
+        </tr>
+
+    </table>
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js"></script>
+
+<script>
+    new Vue({
+        el: "#friends",
+        data:
+        {
+            ynkerner:[],
+        },
+
+        methods: {
+            jnjel: function (x) {
+                axios.get("/Friends/Delete_friend/" + x.id)
+                    .then(r => {
+                        let index = this.ynkerner.indexOf(x);
+                        this.ynkerner.splice(index, 1);
+                    })
+            },
+        },
+        created: function () {
+            axios.get("/Friends/GetMyFriendList/")
+                .then(r => {
+                    this.ynkerner=r.data
+                   
+                })  
+            
+        }
+
+
+
+    })
+</script>
